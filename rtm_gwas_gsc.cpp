@@ -269,7 +269,7 @@ int eigen(const std::vector< std::vector<double> > &mat,
 
 int rtm_gwas_gsc(int argc, char *argv[])
 {
-    std::cerr << "RTM-GWAS v1.5 GSC (Built on " __DATE__ " " __TIME__ ")\n";
+    std::cerr << "RTM-GWAS 2019.0.dev GSC (Built on " __DATE__ " " __TIME__ ")\n";
 
     CmdLine cmd;
 
