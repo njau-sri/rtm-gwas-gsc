@@ -22,4 +22,5 @@ HEADERS += \
     split.h \
     util.h \
     vcf.h \
-    pheno.h
+    pheno.h \
+    version.h
