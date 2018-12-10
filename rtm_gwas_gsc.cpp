@@ -62,15 +62,16 @@ void calc_gsc_matrix(const Genotype &gt, std::vector< std::vector<double> > &x)
 {
     static const size_t m = 10000;
 
-    size_t k = 0;
     auto n = gt.ind.size();
-    std::vector< std::vector<size_t> > z(n, std::vector<size_t>(n,0));
 
-    x.assign(n, std::vector<double>(n,0));
+    x.assign(n, std::vector<double>(n,1));
+
+    std::vector< std::vector<size_t> > z(n, std::vector<size_t>(n,0));
 
     if (gt.ploidy == 1) {
         std::vector< std::vector<allele_t> > dat(n, std::vector<allele_t>(m));
 
+        size_t k = 0;
         for (auto &v : gt.dat) {
             if (k < m) {
                 for (size_t i = 0; i < n; ++i)
@@ -81,7 +82,7 @@ void calc_gsc_matrix(const Genotype &gt, std::vector< std::vector<double> > &x)
 
             for (size_t i = 0; i < n; ++i)
                 for (size_t j = i + 1; j < n; ++j)
-                    calc_gsc1(k, dat[i], dat[j], z[i][j], z[j][i]);
+                    calc_gsc1(m, dat[i], dat[j], z[i][j], z[j][i]);
 
             for (size_t i = 0; i < n; ++i)
                 dat[i][0] = v[i];
@@ -97,6 +98,7 @@ void calc_gsc_matrix(const Genotype &gt, std::vector< std::vector<double> > &x)
     else {
         std::vector< std::vector<allele_t> > dat(n, std::vector<allele_t>(m * 2));
 
+        size_t k = 0;
         for (auto &v : gt.dat) {
             if (k < m) {
                 for (size_t i = 0; i < n; ++i) {
@@ -109,11 +111,11 @@ void calc_gsc_matrix(const Genotype &gt, std::vector< std::vector<double> > &x)
 
             for (size_t i = 0; i < n; ++i)
                 for (size_t j = i + 1; j < n; ++j)
-                    calc_gsc2(k, dat[i], dat[j], z[i][j], z[j][i]);
+                    calc_gsc2(m, dat[i], dat[j], z[i][j], z[j][i]);
 
             for (size_t i = 0; i < n; ++i) {
-                dat[i][0] = v[i * 2];
-                dat[i][1] = v[i * 2 + 1];
+                dat[i][0] = v[i*2];
+                dat[i][1] = v[i*2+1];
             }
             k = 1;
         }
@@ -126,12 +128,9 @@ void calc_gsc_matrix(const Genotype &gt, std::vector< std::vector<double> > &x)
     }
 
     for (size_t i = 0; i < n; ++i) {
-        x[i][i] = 1.0;
         for (size_t j = i + 1; j < n; ++j) {
-            if (z[i][j] != 0) {
-                auto a = static_cast<double>(z[j][i]) / z[i][j];
-                x[i][j] = x[j][i] = a;
-            }
+            auto a = static_cast<double>(z[j][i]) / z[i][j];
+            x[i][j] = x[j][i] = a;
         }
     }
 }
