@@ -141,18 +141,19 @@ void calc_gsc_matrix_omp(const Genotype &gt, std::vector< std::vector<double> > 
     static const size_t m = 10000;
 
     auto n = gt.ind.size();
-    auto p = n*(n-1)/2;
 
     x.assign(n, std::vector<double>(n,1));
 
     std::vector< std::vector<size_t> > z(n, std::vector<size_t>(n,0));
 
     std::vector< std::pair<size_t,size_t> > pidx;
-    pidx.reserve(p);
+    pidx.reserve(n*(n-1)/2);
     for (size_t i = 0; i < n; ++i) {
         for (size_t j = i + 1; j < n; ++j)
             pidx.emplace_back(i,j);
     }
+
+    auto p = pidx.size();
 
     if (gt.ploidy == 1) {
         std::vector< std::vector<allele_t> > dat(n, std::vector<allele_t>(m));
