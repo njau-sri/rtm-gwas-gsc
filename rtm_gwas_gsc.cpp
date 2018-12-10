@@ -140,15 +140,24 @@ void calc_gsc_matrix_omp(const Genotype &gt, std::vector< std::vector<double> > 
 {
     static const size_t m = 10000;
 
-    size_t k = 0;
     auto n = gt.ind.size();
+    auto p = n*(n-1)/2;
+
+    x.assign(n, std::vector<double>(n,1));
+
     std::vector< std::vector<size_t> > z(n, std::vector<size_t>(n,0));
 
-    x.assign(n, std::vector<double>(n,0));
+    std::vector< std::pair<size_t,size_t> > pidx;
+    pidx.reserve(p);
+    for (size_t i = 0; i < n; ++i) {
+        for (size_t j = i + 1; j < n; ++j)
+            pidx.emplace_back(i,j);
+    }
 
     if (gt.ploidy == 1) {
         std::vector< std::vector<allele_t> > dat(n, std::vector<allele_t>(m));
 
+        size_t k = 0;
         for (auto &v : gt.dat) {
             if (k < m) {
                 for (size_t i = 0; i < n; ++i)
@@ -157,12 +166,11 @@ void calc_gsc_matrix_omp(const Genotype &gt, std::vector< std::vector<double> > 
                 continue;
             }
 
-            #pragma omp parallel for collapse(2)
-            for (size_t i = 0; i < n; ++i) {
-                for (size_t j = 1; j < n; ++j) {
-                    if (j > i)
-                        calc_gsc1(k, dat[i], dat[j], z[i][j], z[j][i]);
-                }
+            #pragma omp parallel for
+            for (size_t l = 0; l < p; ++l) {
+                auto i = pidx[l].first;
+                auto j = pidx[l].second;
+                calc_gsc1(m, dat[i], dat[j], z[i][j], z[j][i]);
             }
 
             for (size_t i = 0; i < n; ++i)
@@ -171,18 +179,18 @@ void calc_gsc_matrix_omp(const Genotype &gt, std::vector< std::vector<double> > 
         }
 
         if (k > 0) {
-            #pragma omp parallel for collapse(2)
-            for (size_t i = 0; i < n; ++i) {
-                for (size_t j = 1; j < n; ++j) {
-                    if (j > i)
-                        calc_gsc1(k, dat[i], dat[j], z[i][j], z[j][i]);
-                }
+            #pragma omp parallel for
+            for (size_t l = 0; l < p; ++l) {
+                auto i = pidx[l].first;
+                auto j = pidx[l].second;
+                calc_gsc1(k, dat[i], dat[j], z[i][j], z[j][i]);
             }
         }
     }
     else {
-        std::vector< std::vector<allele_t> > dat(n, std::vector<allele_t>(m * 2));
+        std::vector< std::vector<allele_t> > dat(n, std::vector<allele_t>(m*2));
 
+        size_t k = 0;
         for (auto &v : gt.dat) {
             if (k < m) {
                 for (size_t i = 0; i < n; ++i) {
@@ -193,40 +201,36 @@ void calc_gsc_matrix_omp(const Genotype &gt, std::vector< std::vector<double> > 
                 continue;
             }
 
-            #pragma omp parallel for collapse(2)
-            for (size_t i = 0; i < n; ++i) {
-                for (size_t j = 1; j < n; ++j) {
-                    if (j > i)
-                        calc_gsc2(k, dat[i], dat[j], z[i][j], z[j][i]);
-                }
+            #pragma omp parallel for
+            for (size_t l = 0; l < p; ++l) {
+                auto i = pidx[l].first;
+                auto j = pidx[l].second;
+                calc_gsc2(m, dat[i], dat[j], z[i][j], z[j][i]);
             }
 
             for (size_t i = 0; i < n; ++i) {
-                dat[i][0] = v[i * 2];
-                dat[i][1] = v[i * 2 + 1];
+                dat[i][0] = v[i*2];
+                dat[i][1] = v[i*2+1];
             }
             k = 1;
         }
 
         if (k > 0) {
-            #pragma omp parallel for collapse(2)
-            for (size_t i = 0; i < n; ++i) {
-                for (size_t j = 1; j < n; ++j) {
-                    if (j > i)
-                        calc_gsc2(k, dat[i], dat[j], z[i][j], z[j][i]);
-                }
+            #pragma omp parallel for
+            for (size_t l = 0; l < p; ++l) {
+                auto i = pidx[l].first;
+                auto j = pidx[l].second;
+                calc_gsc2(k, dat[i], dat[j], z[i][j], z[j][i]);
             }
         }
     }
 
-    for (size_t i = 0; i < n; ++i) {
-        x[i][i] = 1.0;
-        for (size_t j = i + 1; j < n; ++j) {
-            if (z[i][j] != 0) {
-                auto a = static_cast<double>(z[j][i]) / z[i][j];
-                x[i][j] = x[j][i] = a;
-            }
-        }
+    #pragma omp parallel for
+    for (size_t l = 0; l < p; ++l) {
+        auto i = pidx[l].first;
+        auto j = pidx[l].second;
+        auto a = static_cast<double>(z[j][i]) / z[i][j];
+        x[i][j] = x[j][i] = a;
     }
 }
 
