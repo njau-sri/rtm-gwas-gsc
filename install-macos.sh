@@ -1,10 +1,8 @@
 #!/bin/bash
 
-LIB=/usr/local/lib
-
-LIBGFORTRAN=${LIB}/libgfortran.a
-LIBQUADMATH=${LIB}/libquadmath.a
-LIBGCC=${LIB}/gcc/x86_64-apple-darwin17.5.0/8.1.0/libgcc.a
+export PATH="/usr/local/opt/llvm@7/bin:$PATH"
+export LDFLAGS="-L/usr/local/opt/llvm@7/lib"
+export CPPFLAGS="-I/usr/local/opt/llvm@7/include"
 
 rm -rf macos
 mkdir macos
@@ -15,5 +13,5 @@ if [ -z "$RTM_GWAS_VERSION" ]; then
     RTM_GWAS_VERSION=unknown
 fi
 
-g++ src/*.cpp -o $TARGET -O2 -std=c++11 -llapack -lrefblas $LIBGFORTRAN $LIBQUADMATH $LIBGCC \
+clang++ src/*.cpp -o $TARGET -O2 -std=c++11 -fopenmp -framework Accelerate \
     -DRTM_GWAS_VERSION=$RTM_GWAS_VERSION
