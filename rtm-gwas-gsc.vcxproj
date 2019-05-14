@@ -70,16 +70,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\Program Files %28x86%29\IntelSWTools\compilers_and_libraries_2019.3.203\windows\mkl\lib\ia32_win;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2019.3.203\windows\mkl\lib\ia32_win;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>C:\Program Files %28x86%29\IntelSWTools\compilers_and_libraries_2019.3.203\windows\mkl\lib\ia32_win;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2019.3.203\windows\mkl\lib\ia32_win;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>C:\Program Files %28x86%29\IntelSWTools\compilers_and_libraries_2019.3.203\windows\mkl\lib\intel64_win;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2019.3.203\windows\mkl\lib\intel64_win;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>C:\Program Files %28x86%29\IntelSWTools\compilers_and_libraries_2019.3.203\windows\mkl\lib\intel64_win;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2019.3.203\windows\mkl\lib\intel64_win;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
