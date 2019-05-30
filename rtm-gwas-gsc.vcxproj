@@ -143,10 +143,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\cmdline.cpp" />
+    <ClCompile Include="src\gsc.cpp" />
     <ClCompile Include="src\lapack.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\pheno.cpp" />
-    <ClCompile Include="src\rtm_gwas_gsc.cpp" />
     <ClCompile Include="src\util.cpp" />
     <ClCompile Include="src\vcf.cpp" />
   </ItemGroup>

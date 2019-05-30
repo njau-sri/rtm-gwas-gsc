@@ -18,6 +18,9 @@
     <ClCompile Include="src\cmdline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\gsc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\lapack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -25,9 +28,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\pheno.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\rtm_gwas_gsc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\util.cpp">
