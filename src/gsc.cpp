@@ -280,7 +280,7 @@ int rtm_gwas_gsc(int argc, char *argv[])
 
     cmd.add("--vcf", "VCF file", "");
     cmd.add("--grm", "genetic relationship matrix file", "");
-    cmd.add("--out", "output file", "rtm-gwas-gsc.out");
+    cmd.add("--out", "output file", "gsc.out");
     cmd.add("--top", "number of eigenvectors", "10");
     cmd.add("--openmp", "enable OpenMP multithreading");
 
